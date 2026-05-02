@@ -12,6 +12,15 @@ export class UsersService {
   }
 
   async findByEmail(email: string) {
-    return this.userModel.findOne({ email });
+    return this.userModel.findOne({ email }).exec();
+  }
+
+  async findById(id: string) {
+    return this.userModel.findById(id).exec();
+  }
+
+  async findAll() {
+    return this.userModel.find().select('-password').exec();
   }
 }
+

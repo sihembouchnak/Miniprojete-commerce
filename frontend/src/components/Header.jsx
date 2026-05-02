@@ -48,7 +48,7 @@ const Header = () => {
                   to={user.role === 'admin' ? '/admin' : '/dashboard'}
                   className="px-4 py-2 text-slate-300 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-200 font-medium hover:scale-105"
                 >
-                  {user.role === 'admin' ? 'Admin' : user.name}
+                  {user.name || 'Account'}
                 </Link>
                 <button
                   onClick={logout}

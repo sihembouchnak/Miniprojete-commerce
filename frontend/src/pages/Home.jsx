@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ProductCard from '../components/ProductCard.jsx';
 import { api } from '../utils/api.js';
+import { products as localProducts } from '../data/products.js';
 
 const Home = () => {
   const [featuredProducts, setFeaturedProducts] = useState([]);
@@ -10,18 +11,21 @@ const Home = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        setLoading(true);
-        const { data } = await api.getProducts();
-        setFeaturedProducts(data.slice(0, 8));
-        setAiTools(data.filter((p) => p.category === 'AI Tools').slice(0, 4));
-      } catch (err) {
-        setError(err.message || 'Failed to load products');
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      const { data } = await api.getProducts();
+      setFeaturedProducts(data.slice(0, 8));
+      setAiTools(data.filter((p) => p.category === 'AI Tools').slice(0, 4));
+    } catch (err) {
+      console.log('API failed, using local data:', err.message);
+      // Fallback to local data
+      setFeaturedProducts(localProducts.slice(0, 8));
+      setAiTools(localProducts.filter((p) => p.category === 'AI Tools').slice(0, 4));
+    } finally {
+      setLoading(false);
+    }
+  };
 
     fetchProducts();
   }, []);

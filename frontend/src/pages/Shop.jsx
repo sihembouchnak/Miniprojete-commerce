@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import ProductCard from '../components/ProductCard.jsx';
 import { FunnelIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { api } from '../utils/api.js';
+import { products as localProducts } from '../data/products.js';
 
 const slugToCategory = (slug) => {
   if (!slug) return 'all';
@@ -23,16 +24,8 @@ const Shop = () => {
   const productsPerPage = 12;
 
   useEffect(() => {
-    const loadCategories = async () => {
-      try {
-        const categoriesFromApi = await api.getCategories();
-        setCategories(['all', ...categoriesFromApi]);
-      } catch (err) {
-        console.error('Unable to load categories', err);
-      }
-    };
-
-    loadCategories();
+    const localCategories = Array.from(new Set(localProducts.map(p => p.category)));
+    setCategories(['all', ...localCategories]);
   }, []);
 
   useEffect(() => {
@@ -63,7 +56,20 @@ const Shop = () => {
         setProducts(data);
         setCurrentPage(1);
       } catch (err) {
-        setError(err.message || 'Failed to load products');
+        console.log('API failed, using local data:', err.message);
+        // Filter local products
+        let filtered = localProducts;
+        if (filters.category && filters.category !== 'all') {
+          filtered = filtered.filter(p => p.category.toLowerCase() === filters.category.toLowerCase());
+        }
+        if (filters.search) {
+          filtered = filtered.filter(p => 
+            p.name.toLowerCase().includes(filters.search.toLowerCase()) ||
+            p.description.toLowerCase().includes(filters.search.toLowerCase())
+          );
+        }
+        setProducts(filtered);
+        setCurrentPage(1);
       } finally {
         setLoading(false);
       }

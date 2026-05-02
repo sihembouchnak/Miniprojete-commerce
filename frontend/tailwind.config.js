@@ -10,22 +10,21 @@ export default {
       colors: {
         primary: {
           50: '#eef2ff',
-          500: '#6366f1', // Indigo
+          400: '#818cf8', // Brighter indigo
+          500: '#6366f1',
           600: '#4f46e5',
-          700: '#4338ca',
         },
         accent: {
-          400: '#22d3ee', // Cyan
+          400: '#22d3ee',
           500: '#06b6d4',
           600: '#0891b2',
         },
         tech: {
           gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          glow: 'rgba(99, 102, 241, 0.5)',
+          glow: 'rgba(129, 140, 248, 0.6)', // Brighter
         },
-        darkBg: '#0f0f23',
-        surface: 'rgba(255,255,255,0.05)',
-        glass: 'rgba(255,255,255,0.1)',
+        surface: 'rgba(255,255,255,0.12)',
+        glass: 'rgba(255,255,255,0.15)',
       },
       fontFamily: {
         sans: ['Inter', 'ui-sans-serif', 'system-ui'],

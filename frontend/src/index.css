@@ -8,7 +8,7 @@
   }
   
   body {
-    @apply bg-gradient-to-br from-slate-900 via-purple-900/20 to-slate-900 font-sans antialiased;
+    @apply bg-gradient-to-br from-slate-800 via-slate-900/50 to-slate-800 font-sans antialiased text-slate-100;
     min-height: 100vh;
   }
   
@@ -18,25 +18,25 @@
   }
   
   ::-webkit-scrollbar-track {
-    @apply bg-slate-800/50;
+    @apply bg-slate-700/50;
   }
   
   ::-webkit-scrollbar-thumb {
-    @apply bg-primary-500/80 rounded-full hover:bg-primary-600;
+    @apply bg-primary-400/80 rounded-full hover:bg-primary-500;
   }
   
-  /* Glassmorphism */
+  /* Improved Glassmorphism - higher contrast */
   .glass {
-    @apply bg-surface/80 backdrop-blur-xl border border-slate-700/50;
+    @apply bg-white/10 backdrop-blur-xl border border-slate-600/50;
   }
   
   /* Pro Buttons */
   .btn-primary {
-    @apply bg-gradient-to-r from-primary-600 to-accent-500 text-white px-6 py-3 rounded-xl font-semibold hover:from-primary-700 hover:to-accent-600 transform hover:scale-105 transition-all duration-200 shadow-glow;
+    @apply bg-gradient-to-r from-primary-500 to-accent-400 text-white px-6 py-3 rounded-xl font-semibold hover:from-primary-600 hover:to-accent-500 transform hover:scale-105 transition-all duration-200 shadow-glow;
   }
   
   .btn-secondary {
-    @apply bg-white/10 backdrop-blur-sm text-white border border-white/20 px-6 py-3 rounded-xl font-semibold hover:bg-white/20 transition-all duration-200;
+    @apply bg-white/20 backdrop-blur-sm text-slate-100 border border-white/30 px-6 py-3 rounded-xl font-semibold hover:bg-white/30 transition-all duration-200;
   }
   
   /* Product Card Hover */

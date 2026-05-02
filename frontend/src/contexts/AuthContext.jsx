@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { api } from '../utils/api.js';
 
 const AuthContext = createContext();
 
@@ -19,6 +20,7 @@ export const AuthProvider = ({ children }) => {
       try {
         setUser(JSON.parse(storedUser));
       } catch {
+        localStorage.removeItem('token');
         localStorage.removeItem('auth_user');
         setUser(null);
       }
@@ -27,19 +29,23 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, password) => {
-    const normalizedEmail = email.toLowerCase();
-    let userData;
-
-    if (normalizedEmail === 'admin@smartstore.com' && password === 'admin123') {
-      userData = { name: 'Admin', email: normalizedEmail, role: 'admin' };
-    } else {
-      userData = { name: normalizedEmail.split('@')[0], email: normalizedEmail, role: 'user' };
+    const response = await api.login(email, password);
+    if (response.token) {
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('auth_user', JSON.stringify(response.user));
+      setUser(response.user);
     }
+    return response.user;
+  };
 
-    localStorage.setItem('token', 'mock-jwt');
-    localStorage.setItem('auth_user', JSON.stringify(userData));
-    setUser(userData);
-    return userData;
+  const register = async (name, email, password) => {
+    const response = await api.register(name, email, password);
+    if (response.token) {
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('auth_user', JSON.stringify(response.user));
+      setUser(response.user);
+    }
+    return response.user;
   };
 
   const logout = () => {
@@ -49,7 +55,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, logout, register, loading }}>
       {children}
     </AuthContext.Provider>
   );

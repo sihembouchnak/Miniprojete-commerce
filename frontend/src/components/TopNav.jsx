@@ -14,7 +14,7 @@ const TopNav = () => {
             <Link to="/contact" className="hover:text-accent-400 transition-colors">Contact</Link>
             {user ? (
               <Link to={user.role === 'admin' ? '/admin' : '/dashboard'} className="hover:text-accent-400 transition-colors">
-                {user.role === 'admin' ? 'Admin' : 'Mon Espace'}
+                {'Mon Espace'}
               </Link>
             ) : null}
           </div>

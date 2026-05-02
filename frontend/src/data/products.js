@@ -6,7 +6,7 @@ export const products = [
     category: "AI Tools",
     description: "Generate professional CV using AI in seconds. Perfect for job seekers.",
     stock: 100,
-    image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=400&fit=crop"
+    image: "/images/portfolio/1.jpg"
   },
   {
     id: 2,
@@ -15,7 +15,7 @@ export const products = [
     category: "AI Tools",
     description: "AI-powered code completion for VS Code, saves 50% development time.",
     stock: 75,
-    image: "https://images.unsplash.com/photo-1517437814255-d123a66f63a9?w=400&fit=crop"
+    image: "/images/portfolio/2.jpg"
   },
   {
     id: 3,
@@ -24,7 +24,7 @@ export const products = [
     category: "AI Tools",
     description: "Automatically detects and suggests fixes for code bugs and errors.",
     stock: 50,
-    image: "https://images.unsplash.com/photo-1558494949-ef0d38d3ab97?w=400&fit=crop"
+    image: "/images/portfolio/3.jpg"
   },
   {
     id: 4,
@@ -33,7 +33,7 @@ export const products = [
     category: "Dev Resources",
     description: "Complete DevOps monitoring and deployment toolkit for teams.",
     stock: 30,
-    image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400&fit=crop"
+    image: "/images/portfolio/4.jpg"
   },
   {
     id: 5,

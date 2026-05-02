@@ -6,51 +6,101 @@ import { ShoppingBagIcon, ChartBarIcon, UserGroupIcon } from '@heroicons/react/2
 const Dashboard = () => {
   const { user, logout } = useAuth();
 
-  return (
-    <div className="min-h-screen py-20 px-4 bg-gradient-to-br from-slate-900 via-primary-900/30 to-accent-900/30">
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
-          <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-white to-primary-400 bg-clip-text text-transparent mb-6">
-            Dashboard
-          </h1>
-          <p className="text-xl text-slate-400 max-w-2xl mx-auto">
-            Welcome back, <span className="font-bold text-accent-400">{user?.name || 'User'}</span>!
-          </p>
-        </div>
+return (
+    <>
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h1 className="h3 mb-0 text-gray-800">User Dashboard</h1>
+        <ol className="breadcrumb mb-0">
+          <li className="breadcrumb-item active">Dashboard</li>
+        </ol>
+      </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-          <div className="glass p-8 rounded-3xl text-center hover:scale-105 transition-all group">
-            <ShoppingBagIcon className="w-20 h-20 text-primary-400 mx-auto mb-6 group-hover:rotate-6 transition-transform" />
-            <h3 className="text-2xl font-bold text-white mb-4">Orders</h3>
-            <p className="text-slate-400 text-lg mb-8">3 active orders</p>
-            <Link to="/shop" className="btn-primary px-8 py-3">View Orders</Link>
-          </div>
-
-          <div className="glass p-8 rounded-3xl text-center hover:scale-105 transition-all group">
-            <ChartBarIcon className="w-20 h-20 text-accent-400 mx-auto mb-6 group-hover:rotate-6 transition-transform" />
-            <h3 className="text-2xl font-bold text-white mb-4">Analytics</h3>
-            <p className="text-slate-400 text-lg mb-8">$1,234 total spent</p>
-            <button className="bg-gradient-to-r from-accent-500 to-emerald-500 hover:from-accent-600 px-8 py-3 rounded-2xl font-bold text-white shadow-glow transition-all">View Stats</button>
-          </div>
-
-          <div className="glass p-8 rounded-3xl text-center hover:scale-105 transition-all group">
-            <UserGroupIcon className="w-20 h-20 text-emerald-400 mx-auto mb-6 group-hover:rotate-6 transition-transform" />
-            <h3 className="text-2xl font-bold text-white mb-4">Support</h3>
-            <p className="text-slate-400 text-lg mb-8">24/7 priority support</p>
-            <Link to="/contact" className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 px-8 py-3 rounded-2xl font-bold text-white shadow-glow transition-all">Contact Support</Link>
+      {/* Stats Cards */}
+      <div className="row mb-4">
+        <div className="col-xl-4 col-md-6 mb-4">
+          <div className="card border-left-primary shadow h-100 py-2">
+            <div className="card-body">
+              <div className="row no-gutters align-items-center">
+                <div className="col mr-2">
+                  <div className="text-xs font-weight-bold text-primary text-uppercase mb-1">Active Orders</div>
+                  <div className="h5 mb-0 font-weight-bold text-gray-800">3</div>
+                </div>
+                <div className="col-auto">
+                  <i className="fas fa-shopping-cart fa-2x text-gray-300"></i>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-
-        <div className="text-center">
-          <button 
-            onClick={logout}
-            className="bg-gradient-to-r from-slate-600 to-slate-700 hover:from-slate-700 text-white font-bold py-4 px-12 rounded-2xl shadow-lg hover:shadow-glow transition-all duration-200 transform hover:scale-105"
-          >
-            Logout
-          </button>
+        <div className="col-xl-4 col-md-6 mb-4">
+          <div className="card border-left-success shadow h-100 py-2">
+            <div className="card-body">
+              <div className="row no-gutters align-items-center">
+                <div className="col mr-2">
+                  <div className="text-xs font-weight-bold text-success text-uppercase mb-1">Total Spent</div>
+                  <div className="h5 mb-0 font-weight-bold text-gray-800">$1,234</div>
+                </div>
+                <div className="col-auto">
+                  <i className="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="col-xl-4 col-md-6 mb-4">
+          <div className="card border-left-info shadow h-100 py-2">
+            <div className="card-body">
+              <div className="row no-gutters align-items-center">
+                <div className="col mr-2">
+                  <div className="text-xs font-weight-bold text-info text-uppercase mb-1">Support</div>
+                  <div className="h5 mb-0 font-weight-bold text-gray-800">24/7 Available</div>
+                </div>
+                <div className="col-auto">
+                  <i className="fas fa-headset fa-2x text-gray-300"></i>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+
+      {/* Quick Actions */}
+      <div className="row">
+        <div className="col-xl-4 col-md-6 mb-4">
+          <div className="card border-left-primary shadow-sm h-100">
+            <div className="card-body">
+              <h6 className="card-title font-weight-bold text-primary mb-3">View Orders</h6>
+              <p className="card-text">Manage your active orders and track deliveries.</p>
+              <Link to="/shop" className="btn btn-primary">Shop Now</Link>
+            </div>
+          </div>
+        </div>
+        <div className="col-xl-4 col-md-6 mb-4">
+          <div className="card border-left-success shadow-sm h-100">
+            <div className="card-body">
+              <h6 className="card-title font-weight-bold text-success mb-3">Analytics</h6>
+              <p className="card-text">View your spending analytics and purchase history.</p>
+              <button className="btn btn-success">View Stats</button>
+            </div>
+          </div>
+        </div>
+        <div className="col-xl-4 col-md-6 mb-4">
+          <div className="card border-left-info shadow-sm h-100">
+            <div className="card-body">
+              <h6 className="card-title font-weight-bold text-info mb-3">Get Support</h6>
+              <p className="card-text">Contact our 24/7 support team for assistance.</p>
+              <Link to="/contact" className="btn btn-info">Contact Us</Link>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="text-center mt-4">
+        <button onClick={logout} className="btn btn-secondary btn-lg">
+          <i className="fas fa-sign-out-alt me-2"></i> Logout
+        </button>
+      </div>
+    </>
   );
 };
 

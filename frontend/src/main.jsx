@@ -12,7 +12,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   </React.StrictMode>,
 )
 
-// Apply dark mode class for Tailwind
-document.documentElement.classList.add('dark')
-document.body.classList.add('dark')
+
 

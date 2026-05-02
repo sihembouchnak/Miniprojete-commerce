@@ -1,35 +1,30 @@
-# Frontend Completion Plan - Make it Run Correctly
+# Dashboard Admin Professionnel - Plan d'implémentation
 
-## 1. Install Dependencies [x] (deps present)
-- cd frontend && npm i react-router-dom lucide-react clsx tailwind-merge @heroicons/react
+## Phase 1 — Backend NestJS (Sécurité & Données)
+- [x] Créer `orders/schemas/order.schema.ts`
+- [x] Créer `orders/orders.service.ts`
+- [x] Créer `orders/orders.controller.ts`
+- [x] Créer `orders/orders.module.ts`
+- [ ] Créer `admin/admin.service.ts`
+- [ ] Créer `admin/admin.controller.ts`
+- [ ] Créer `admin/admin.module.ts`
+- [x] Créer `auth/jwt.strategy.ts`
+- [x] Créer `auth/roles.guard.ts` (incomplete - needs fix)
+- [ ] Créer `auth/roles.decorator.ts`
+- [ ] Modifier `auth/auth.service.ts` — retourner user avec token
+- [ ] Modifier `auth/auth.controller.ts` — retourner user dans login
+- [ ] Modifier `auth/auth.module.ts` — ajouter PassportModule, JwtStrategy
+- [ ] Modifier `app.module.ts` — importer OrdersModule + AdminModule
+- [ ] Modifier `main.ts` — ajouter prefix global `/api`
+- [x] Créer `seed.ts` — seeder admin + données de test
+- [ ] Modifier `users/users.service.ts` — ajouter findById, findAll
 
-## 2. Create Utils [ ]
-- utils/cn.js: clsx utility
-- utils/api.js: Mock API calls
+## Phase 2 — Frontend (AuthContext & API)
+- [ ] Modifier `frontend/src/contexts/AuthContext.jsx` — connexion API réelle
+- [ ] Modifier `frontend/src/utils/api.js` — endpoints backend + auth headers
 
-## 3. Theme & Context [ ]
-- src/theme/ThemeProvider.jsx
-- src/contexts/AuthContext.jsx
+## Phase 3 — Dashboard Admin Professionnel
+- [ ] Modifier `frontend/src/pages/admin/dashboard/Dashboard.jsx` — dashboard dynamique complet
+- [ ] Modifier `frontend/src/pages/dashboard/Charts.jsx` — données dynamiques
+- [ ] Modifier `frontend/src/pages/dashboard/Tables.jsx` — données dynamiques
 
-## 4. App.jsx Routing [x]\n- Add Router, routes for all pages
-
-## 5. Complete Pages/Components [ ]
-- Login.jsx, Register.jsx
-- Contact.jsx
-- AdminDashboard.jsx
-- Dashboard.jsx
-- Auth.jsx (wrapper?)
-- Enhance Home, Shop, ProductDetail
-- Header: Nav links, auth
-
-## 6. AI Features [ ]
-- AIAssistant.jsx, Chatbot.jsx stub
-
-## 7. Test Run [ ]
-- npm run dev
-- Check no console errors, navigate pages, mock auth
-
-## 8. Polish [ ]
-- Responsive, dark mode, cart stub
-
-Updated when steps done.

@@ -4,6 +4,7 @@ import { ArrowLeftIcon, ShoppingCartIcon, HeartIcon, StarIcon } from '@heroicons
 import { StarIcon as StarSolid } from '@heroicons/react/24/solid';
 import ProductCard from '../components/ProductCard.jsx';
 import { api } from '../utils/api.js';
+import { products as localProducts } from '../data/products.js';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -20,7 +21,14 @@ const ProductDetail = () => {
         const productData = await api.getProduct(id);
         setProduct(productData);
       } catch (err) {
-        setError(err.message || 'Product not found');
+        console.log('API failed, using local data:', err.message);
+        // Fallback to local data
+        const productData = localProducts.find(p => p.id == id);
+        if (productData) {
+          setProduct(productData);
+        } else {
+          setError('Product not found');
+        }
       } finally {
         setLoading(false);
       }
@@ -38,7 +46,9 @@ const ProductDetail = () => {
         const { data } = await api.getProducts({ category: product.category });
         setRelatedProducts(data.filter((p) => p.id !== product.id).slice(0, 4));
       } catch (err) {
-        console.error('Unable to load related products', err);
+        console.log('Related API failed, using local data');
+        const related = localProducts.filter((p) => p.category === product.category && p.id !== product.id).slice(0, 4);
+        setRelatedProducts(related);
       }
     };
 
