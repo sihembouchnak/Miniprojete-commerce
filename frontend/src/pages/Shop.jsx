@@ -103,36 +103,36 @@ const Shop = () => {
       <div className="container">
         {/* Header */}
         <div className="text-center mb-16">
-          <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-primary-500 to-accent-500 bg-clip-text text-transparent mb-4">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold bg-gradient-to-r from-primary-600 to-accent-500 bg-clip-text text-transparent mb-4">
             Tech Store
           </h1>
-          <p className="text-xl text-slate-400 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto font-body">
             Discover premium AI tools, software, and developer resources
           </p>
         </div>
 
         {/* Filters */}
-        <div className="glass p-8 rounded-2xl mb-12 border border-slate-700/50">
+        <div className="card p-8 lg:p-12 rounded-2xl mb-12 shadow-soft">
           <div className="flex flex-col lg:flex-row gap-8 items-center justify-between">
             {/* Search */}
-            <div className="relative w-full lg:w-80">
-              <MagnifyingGlassIcon className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
+            <div className="relative w-full lg:w-96">
+              <MagnifyingGlassIcon className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
                 type="text"
                 placeholder="Search products..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-6 py-4 bg-surface/50 border border-slate-600/50 rounded-xl text-white placeholder-slate-500 focus:border-primary-500 focus:outline-none transition-all"
+                className="w-full pl-12 pr-6 py-4 bg-white border border-gray-200 rounded-xl text-neutral-900 placeholder-gray-500 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-200 focus:ring-opacity-50 transition-all shadow-soft"
               />
             </div>
 
             {/* Category Filter */}
             <div className="flex items-center space-x-2">
-              <FunnelIcon className="w-6 h-6 text-slate-400" />
+              <FunnelIcon className="w-6 h-6 text-gray-400" />
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="bg-surface/50 border border-slate-600/50 text-white px-4 py-3 rounded-xl focus:border-primary-500 focus:outline-none"
+                className="bg-white border border-gray-200 text-neutral-900 px-4 py-3 rounded-xl focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-200 shadow-soft"
               >
                 {categories.map(cat => (
                   <option key={cat} value={cat}>{cat.toUpperCase()}</option>
@@ -141,7 +141,7 @@ const Shop = () => {
             </div>
 
             {/* Results Info */}
-            <div className="text-slate-400 font-mono">
+            <div className="text-gray-500 font-mono text-sm">
               {products.length} products found
             </div>
           </div>

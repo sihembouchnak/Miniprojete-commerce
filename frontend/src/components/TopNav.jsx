@@ -9,12 +9,13 @@ const TopNav = () => {
       <div className="container py-3">
         <div className="flex items-center justify-between text-sm text-slate-400">
           <div className="flex space-x-6">
-            <span>🚀 Premium AI & Dev Tools</span>
+            <span>AI & Dev Tools</span>
+
             <Link to="/shop" className="hover:text-accent-400 transition-colors">Boutique</Link>
             <Link to="/contact" className="hover:text-accent-400 transition-colors">Contact</Link>
             {user ? (
-              <Link to={user.role === 'admin' ? '/admin' : '/dashboard'} className="hover:text-accent-400 transition-colors">
-                {user.role === 'admin' ? 'Admin' : 'Mon Espace'}
+              <Link to={user.role === 'admin' ? '/admin' : '/dashboard'} className="hover:text-accent-400 transition-colors font-semibold">
+                {user.role === 'admin' ? 'Admin Dashboard' : 'Mon Espace'}
               </Link>
             ) : null}
           </div>

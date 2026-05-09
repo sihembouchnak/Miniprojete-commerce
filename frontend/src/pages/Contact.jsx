@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRightIcon, MapPinIcon, PhoneIcon, EnvelopeIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline';
+import { api } from '../utils/api.js';
+import Input from '../components/ui/Input.jsx';
+import Textarea from '../components/ui/Textarea.jsx';
+import Button from '../components/ui/Button.jsx';
 
 const Contact = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState('');
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -15,13 +20,17 @@ const Contact = () => {
     e.preventDefault();
     setLoading(true);
     setSuccess('');
+    setError('');
 
-    // Mock submit
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    setSuccess('Message sent successfully! 🚀');
-    setFormData({ name: '', email: '', message: '' });
-    setLoading(false);
+    try {
+      await api.sendMessage(formData);
+      setSuccess('Message sent successfully! 🚀');
+      setFormData({ name: '', email: '', subject: '', message: '' });
+    } catch (err) {
+      setError(err.message || 'Failed to send message');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -84,62 +93,69 @@ const Contact = () => {
               </div>
             )}
 
+            {error && (
+              <div className="bg-red-500/20 border border-red-500/50 text-red-300 p-6 rounded-2xl mb-6 text-center font-medium">
+                {error}
+              </div>
+            )}
+
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label className="block text-sm font-bold text-slate-300 mb-3">Your Name</label>
-                <input
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="w-full px-5 py-4 bg-white/5 border border-white/20 rounded-2xl text-white placeholder-slate-400 focus:ring-4 focus:ring-accent-500/30 focus:border-accent-500 backdrop-blur-sm transition-all"
-                  placeholder="John Doe"
-                  required
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-bold text-slate-300 mb-3">Email</label>
-                <input
-                  name="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="w-full px-5 py-4 bg-white/5 border border-white/20 rounded-2xl text-white placeholder-slate-400 focus:ring-4 focus:ring-accent-500/30 focus:border-accent-500 backdrop-blur-sm transition-all"
-                  placeholder="john@example.com"
-                  required
-                />
-              </div>
+              <Input
+                label="Your Name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="John Doe"
+                required
+              />
 
-              <div>
-                <label className="block text-sm font-bold text-slate-300 mb-3">Message</label>
-                <textarea
-                  name="message"
-                  rows="6"
-                  value={formData.message}
-                  onChange={handleChange}
-                  className="w-full px-5 py-4 bg-white/5 border border-white/20 rounded-2xl text-white placeholder-slate-400 focus:ring-4 focus:ring-accent-500/30 focus:border-accent-500 backdrop-blur-sm transition-all resize-vertical"
-                  placeholder="Tell us about your project or question..."
-                  required
-                />
-              </div>
+              <Input
+                label="Email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="john@example.com"
+                required
+              />
 
-              <button
+              <Input
+                label="Subject"
+                name="subject"
+                value={formData.subject}
+                onChange={handleChange}
+                placeholder="How can we help you?"
+                required
+              />
+
+              <Textarea
+                label="Message"
+                name="message"
+                rows="6"
+                value={formData.message}
+                onChange={handleChange}
+                placeholder="Tell us about your project or question..."
+                required
+              />
+
+              <Button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-accent-500 to-emerald-500 hover:from-accent-600 hover:to-emerald-600 text-white font-bold py-4 px-6 rounded-2xl shadow-glow-lg transform hover:scale-[1.02] transition-all duration-200 flex items-center justify-center space-x-3 disabled:opacity-50"
+                className="w-full"
+                size="lg"
               >
                 {loading ? (
                   <>
-                    <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    <span>Sending...</span>
+                    <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin mr-3" />
+                    Sending...
                   </>
                 ) : (
                   <>
-                    <PaperAirplaneIcon className="w-5 h-5" />
-                    <span>Send Message</span>
+                    <PaperAirplaneIcon className="w-5 h-5 mr-3" />
+                    Send Message
                   </>
                 )}
-              </button>
+              </Button>
             </form>
           </div>
         </div>

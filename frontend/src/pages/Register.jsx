@@ -7,7 +7,7 @@ const Register = () => {
   const [formData, setFormData] = useState({ name: '', email: '', password: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const { login } = useAuth();
+  const { register } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -20,13 +20,10 @@ const Register = () => {
     setError('');
 
     try {
-      // Mock register + auto-login
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      localStorage.setItem('token', 'mock-jwt');
-      await login(formData.email, formData.password);
+      await register(formData.name, formData.email, formData.password);
       navigate('/');
     } catch (err) {
-      setError('Registration failed');
+      setError(err.message || 'Registration failed');
     } finally {
       setLoading(false);
     }

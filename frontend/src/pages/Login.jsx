@@ -26,7 +26,7 @@ const Login = () => {
         navigate(redirect === '/admin' ? '/dashboard' : redirect, { replace: true });
       }
     } catch (err) {
-      setError('Invalid credentials. Use admin@smartstore.com / admin123 or any valid email/password.');
+      setError(err?.message || 'Impossible de se connecter. Vérifiez votre email et votre mot de passe.');
     } finally {
       setLoading(false);
     }

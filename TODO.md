@@ -1,35 +1,12 @@
-# Frontend Completion Plan - Make it Run Correctly
+# TODO - Changement couleurs site (blanc + bleu)
 
-## 1. Install Dependencies [x] (deps present)
-- cd frontend && npm i react-router-dom lucide-react clsx tailwind-merge @heroicons/react
+- [ ] Analyser où les couleurs “primary/accent” et gradients sont utilisés (tailwind classes)
+- [x] Mettre à jour `frontend/tailwind.config.js` : redéfinir la palette `primary` en bleu + ajuster `accent` (optionnel)
 
-## 2. Create Utils [ ]
-- utils/cn.js: clsx utility
-- utils/api.js: Mock API calls
+- [x] Mettre à jour les couleurs CSS personnalisées dans `frontend/src/index.css` (scrollbar, selection, etc.) si elles dépendent de `primary`
 
-## 3. Theme & Context [ ]
-- src/theme/ThemeProvider.jsx
-- src/contexts/AuthContext.jsx
+- [x] Remplacer les occurrences de couleurs statiques (ex: `from-purple-...`, `via-purple-...`, `to-purple-...`, `bg-blue-...`) si nécessaires pour harmoniser “blanc + bleu”
 
-## 4. App.jsx Routing [x]\n- Add Router, routes for all pages
+- [x] Lancer le build/dev pour vérifier absence d’erreurs Tailwind
 
-## 5. Complete Pages/Components [ ]
-- Login.jsx, Register.jsx
-- Contact.jsx
-- AdminDashboard.jsx
-- Dashboard.jsx
-- Auth.jsx (wrapper?)
-- Enhance Home, Shop, ProductDetail
-- Header: Nav links, auth
 
-## 6. AI Features [ ]
-- AIAssistant.jsx, Chatbot.jsx stub
-
-## 7. Test Run [ ]
-- npm run dev
-- Check no console errors, navigate pages, mock auth
-
-## 8. Polish [ ]
-- Responsive, dark mode, cart stub
-
-Updated when steps done.

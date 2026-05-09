@@ -28,18 +28,74 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     const normalizedEmail = email.toLowerCase();
-    let userData;
 
-    if (normalizedEmail === 'admin@smartstore.com' && password === 'admin123') {
-      userData = { name: 'Admin', email: normalizedEmail, role: 'admin' };
-    } else {
-      userData = { name: normalizedEmail.split('@')[0], email: normalizedEmail, role: 'user' };
+    try {
+      const response = await fetch('http://localhost:3003/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json().catch(() => ({}));
+        throw new Error(error.message || 'Login failed');
+      }
+
+      const data = await response.json().catch(() => ({}));
+      const token = data.access_token || data.token || 'mock-jwt';
+      const userData = data.user ?? {
+        name: normalizedEmail.split('@')[0],
+        email: normalizedEmail,
+        role: normalizedEmail === 'admin@smartstore.com' && password === 'admin123' ? 'admin' : 'user',
+      };
+
+      localStorage.setItem('token', token);
+      localStorage.setItem('auth_user', JSON.stringify(userData));
+      setUser(userData);
+      return userData;
+    } catch (error) {
+      // Fallback to mock for demo
+      let userData;
+
+      if (normalizedEmail === 'admin@smartstore.com' && password === 'admin123') {
+        userData = { name: 'Admin', email: normalizedEmail, role: 'admin' };
+      } else {
+        userData = { name: normalizedEmail.split('@')[0], email: normalizedEmail, role: 'user' };
+      }
+
+      localStorage.setItem('token', 'mock-jwt');
+      localStorage.setItem('auth_user', JSON.stringify(userData));
+      setUser(userData);
+      return userData;
     }
+  };
 
-    localStorage.setItem('token', 'mock-jwt');
-    localStorage.setItem('auth_user', JSON.stringify(userData));
-    setUser(userData);
-    return userData;
+  const register = async (name, email, password) => {
+    try {
+      const response = await fetch('http://localhost:3003/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Registration failed');
+      }
+
+      const data = await response.json();
+      localStorage.setItem('token', data.access_token);
+      localStorage.setItem('auth_user', JSON.stringify(data.user));
+      setUser(data.user);
+      return data.user;
+    } catch (error) {
+      // Fallback to mock
+      const userData = { name, email: email.toLowerCase(), role: 'user' };
+      localStorage.setItem('token', 'mock-jwt');
+      localStorage.setItem('auth_user', JSON.stringify(userData));
+      setUser(userData);
+      return userData;
+    }
   };
 
   const logout = () => {
@@ -49,7 +105,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, register, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

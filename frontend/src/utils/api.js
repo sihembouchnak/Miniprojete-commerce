@@ -1,41 +1,173 @@
-// API for frontend - connects to backend
-const API_BASE_URL = 'http://127.0.0.1:3000';
+import { products as mockProducts } from '../data/products.js';
 
-const normalizeProduct = (product) => ({
-  ...product,
-  id: product.id ?? product._id,
-});
+const mockDelay = (ms = 300) => new Promise(resolve => setTimeout(resolve, ms));
 
-export const api = {
+const mockApi = {
   getProducts: async (filters = {}) => {
-    const params = new URLSearchParams();
-    if (filters.category) params.append('category', filters.category);
-    if (filters.search) params.append('search', filters.search);
-
-    const query = params.toString();
-    const response = await fetch(`${API_BASE_URL}/products${query ? `?${query}` : ''}`);
-    if (!response.ok) throw new Error('Failed to fetch products');
-    const data = await response.json();
-
+    await mockDelay();
+    let filtered = [...mockProducts];
+    if (filters.category) {
+      filtered = filtered.filter(p => p.category.toLowerCase() === filters.category.toLowerCase());
+    }
+    if (filters.search) {
+      const query = filters.search.toLowerCase();
+      filtered = filtered.filter(
+        p => p.name.toLowerCase().includes(query) || (p.description || '').toLowerCase().includes(query)
+      );
+    }
     return {
-      data: data.map(normalizeProduct),
-      total: data.length,
-      pages: Math.ceil(data.length / 12)
+      data: filtered.slice(0, 12),
+      total: filtered.length,
+      pages: Math.ceil(filtered.length / 12),
     };
   },
 
   getProduct: async (id) => {
-    const response = await fetch(`${API_BASE_URL}/products/${id}`);
-    if (!response.ok) throw new Error('Failed to fetch product');
-    const product = await response.json();
-    return normalizeProduct(product);
+    await mockDelay();
+    const product = mockProducts.find(p => p.id == id);
+    if (!product) throw new Error('Product not found');
+    return product;
   },
 
   getCategories: async () => {
-    const response = await fetch(`${API_BASE_URL}/products`);
-    if (!response.ok) throw new Error('Failed to fetch products');
-    const products = await response.json();
-    return Array.from(new Set(products.map(p => p.category)));
-  }
+    await mockDelay();
+    return Array.from(new Set(mockProducts.map(p => p.category)));
+  },
+
+  createProduct: async () => { throw new Error('Backend required'); },
+  updateProduct: async () => { throw new Error('Backend required'); },
+  deleteProduct: async () => { throw new Error('Backend required'); },
+  getUsers: async () => { throw new Error('Backend required'); },
+  updateUser: async () => { throw new Error('Backend required'); },
+  deleteUser: async () => { throw new Error('Backend required'); },
 };
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3003';
+
+async function request(path, { method = 'GET', body, query, token } = {}) {
+  const url = new URL(path, API_URL);
+
+  if (query) {
+    Object.entries(query).forEach(([k, v]) => {
+      if (v === undefined || v === null || v === '') return;
+      url.searchParams.set(k, String(v));
+    });
+  }
+
+  const headers = {
+    'Content-Type': 'application/json',
+  };
+
+  if (token) headers['Authorization'] = `Bearer ${token}`;
+
+  const res = await fetch(url.toString(), {
+    method,
+    headers,
+    body: body !== undefined ? JSON.stringify(body) : undefined,
+  });
+
+  const text = await res.text();
+  const data = text ? (() => { try { return JSON.parse(text); } catch { return text; } })() : null;
+
+  if (!res.ok) {
+    const message = data?.message || data?.error || text || `HTTP ${res.status}`;
+    throw new Error(message);
+  }
+
+  return data;
+}
+
+function getToken() {
+  const t = localStorage.getItem('token');
+  return t || undefined;
+}
+
+export const api = {
+  getProducts: async (filters = {}) => {
+    try {
+      const data = await request('/products', { query: filters });
+      // backend returns array currently. normalize to match UI expectations {data,total,pages}
+      const arr = Array.isArray(data) ? data : data?.data;
+      const list = arr || [];
+      return {
+        data: list,
+        total: list.length,
+        // backend currently returns a list (no pagination metadata). Keep pages consistent anyway.
+        pages: Math.max(1, Math.ceil(list.length / 12)),
+      };
+    } catch (e) {
+      return mockApi.getProducts(filters);
+    }
+  },
+
+  getProduct: async (id) => {
+    try {
+      return await request(`/products/${id}`);
+    } catch (e) {
+      return mockApi.getProduct(id);
+    }
+  },
+
+  getCategories: async () => {
+    try {
+      // backend has no categories endpoint; derive from products
+      const productsResp = await request('/products');
+      const list = Array.isArray(productsResp) ? productsResp : productsResp?.data || [];
+      return Array.from(new Set(list.map(p => p.category).filter(Boolean)));
+    } catch (e) {
+      return mockApi.getCategories();
+    }
+  },
+
+  createProduct: async (payload) => {
+    return request('/products', { method: 'POST', body: payload, token: getToken() });
+  },
+
+  updateProduct: async (id, payload) => {
+    return request(`/products/${id}`, { method: 'PUT', body: payload, token: getToken() });
+  },
+
+  deleteProduct: async (id) => {
+    return request(`/products/${id}`, { method: 'DELETE', token: getToken() });
+  },
+
+  getUsers: async () => {
+    try {
+      const data = await request('/users', { token: getToken() });
+      return { data: Array.isArray(data) ? data : (data?.data || []) };
+    } catch (e) {
+      return mockApi.getUsers();
+    }
+  },
+
+  updateUser: async (id, payload) => {
+    return request(`/users/${id}`, { method: 'PUT', body: payload, token: getToken() });
+  },
+
+  deleteUser: async (id) => {
+    return request(`/users/${id}`, { method: 'DELETE', token: getToken() });
+  },
+
+  sendMessage: async (payload) => {
+    return request('/messages', { method: 'POST', body: payload });
+  },
+
+  getMessages: async () => {
+    try {
+      const data = await request('/messages', { token: getToken() });
+      return { data: Array.isArray(data) ? data : (data?.data || []) };
+    } catch (e) {
+      return { data: [] };
+    }
+  },
+
+  markMessageAsRead: async (id) => {
+    return request(`/messages/${id}/read`, { method: 'PUT', token: getToken() });
+  },
+
+  deleteMessage: async (id) => {
+    return request(`/messages/${id}`, { method: 'DELETE', token: getToken() });
+  },
+};
+
 

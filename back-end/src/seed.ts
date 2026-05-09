@@ -9,7 +9,7 @@ const products = [
     category: "AI Tools",
     description: "Generate professional CV using AI in seconds. Perfect for job seekers.",
     stock: 100,
-    image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=400&fit=crop"
+    images: ["https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=400&fit=crop"]
   },
   {
     name: "Code Autocompletion Pro",
@@ -17,7 +17,7 @@ const products = [
     category: "AI Tools",
     description: "AI-powered code completion for VS Code, saves 50% development time.",
     stock: 75,
-    image: "https://images.unsplash.com/photo-1517437814255-d123a66f63a9?w=400&fit=crop"
+    images: ["https://images.unsplash.com/photo-1517437814255-d123a66f63a9?w=400&fit=crop"]
   },
   {
     name: "Bug Finder AI",
@@ -25,7 +25,7 @@ const products = [
     category: "AI Tools",
     description: "Automatically detects and suggests fixes for code bugs and errors.",
     stock: 50,
-    image: "https://images.unsplash.com/photo-1558494949-ef0d38d3ab97?w=400&fit=crop"
+    images: ["https://images.unsplash.com/photo-1558494949-ef0d38d3ab97?w=400&fit=crop"]
   },
   {
     name: "DevOps Dashboard",
@@ -33,7 +33,7 @@ const products = [
     category: "Dev Resources",
     description: "Complete DevOps monitoring and deployment toolkit for teams.",
     stock: 30,
-    image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400&fit=crop"
+    images: ["https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400&fit=crop"]
   },
   {
     name: "React Boilerplate Pro",
@@ -41,7 +41,7 @@ const products = [
     category: "Software Tools",
     description: "Production-ready React template with Tailwind, TypeScript, and auth.",
     stock: 80,
-    image: "https://images.unsplash.com/photo-1547658719-da2b848c1f92?w=400&fit=crop"
+    images: ["https://images.unsplash.com/photo-1547658719-da2b848c1f92?w=400&fit=crop"]
   },
   {
     name: "Node.js API Starter",
@@ -49,7 +49,7 @@ const products = [
     category: "Software Tools",
     description: "Full-stack Node.js REST API with MongoDB, JWT auth, and tests.",
     stock: 60,
-    image: "https://images.unsplash.com/photo-1618049353753-787e64a6da96?w=400&fit=crop"
+    images: ["https://images.unsplash.com/photo-1618049353753-787e64a6da96?w=400&fit=crop"]
   },
   {
     name: "AI Image Generator",
@@ -57,7 +57,7 @@ const products = [
     category: "AI Tools",
     description: "Generate stunning images from text prompts using Stable Diffusion.",
     stock: 90,
-    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&fit=crop"
+    images: ["https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&fit=crop"]
   },
   {
     name: "Docker Mastery Kit",
@@ -65,7 +65,7 @@ const products = [
     category: "Dev Resources",
     description: "Complete Docker, Kubernetes, CI/CD learning path and templates.",
     stock: 40,
-    image: "https://images.unsplash.com/photo-1614346426678-2b3dc62e3b62?w=400&fit=crop"
+    images: ["https://images.unsplash.com/photo-1614346426678-2b3dc62e3b62?w=400&fit=crop"]
   },
   {
     name: "Tailwind UI Kit",
@@ -73,7 +73,7 @@ const products = [
     category: "Dev Resources",
     description: "200+ responsive Tailwind components for modern web apps.",
     stock: 25,
-    image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400&fit=crop"
+    images: ["https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400&fit=crop"]
   },
   {
     name: "SQL Query Optimizer",
@@ -81,7 +81,7 @@ const products = [
     category: "Software Tools",
     description: "AI-powered SQL query optimization and database performance tool.",
     stock: 70,
-    image: "https://images.unsplash.com/photo-1518779660304-7ef4a971f5e9?w=400&fit=crop"
+    images: ["https://images.unsplash.com/photo-1518779660304-7ef4a971f5e9?w=400&fit=crop"]
   },
   {
     name: "ChatGPT API Wrapper",
@@ -89,7 +89,7 @@ const products = [
     category: "AI Tools",
     description: "Easy-to-use wrapper for OpenAI API with advanced prompting templates.",
     stock: 55,
-    image: "https://images.unsplash.com/photo-1687360471640-6d4fbcc8802a?w=400&fit=crop"
+    images: ["https://images.unsplash.com/photo-1687360471640-6d4fbcc8802a?w=400&fit=crop"]
   },
   {
     name: "Full-Stack MERN Kit",
@@ -97,7 +97,7 @@ const products = [
     category: "Dev Resources",
     description: "Complete MERN stack e-commerce template ready for production.",
     stock: 20,
-    image: "https://images.unsplash.com/photo-1558494949-ef0d38d3ab97?w=400&fit=crop"
+    images: ["https://images.unsplash.com/photo-1558494949-ef0d38d3ab97?w=400&fit=crop"]
   },
   {
     name: "Performance Profiler",
@@ -121,13 +121,16 @@ const products = [
     category: "Dev Resources",
     description: "Essential security tools, checklists, and best practices for developers.",
     stock: 35,
-    image: "https://images.unsplash.com/photo-1614046988866-92b2d691a229?w=400&fit=crop"
+    images: ["https://images.unsplash.com/photo-1614046988866-92b2d691a229?w=400&fit=crop"]
   }
 ];
 
 async function seed() {
   const app = await NestFactory.createApplicationContext(AppModule);
   const productsService = app.get(ProductsService);
+
+  // Clear existing products
+  await productsService.deleteAll();
 
   for (const product of products) {
     await productsService.create(product);

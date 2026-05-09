@@ -1,53 +1,63 @@
-/* Additional custom styles for Smart Tech Store */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-/* AI Chat Widget */
-.ai-chat {
-  @apply fixed bottom-6 right-6 w-80 h-96 glass rounded-2xl shadow-2xl border border-primary-500/30 z-50 transition-all duration-300;
-}
+@layer utilities {
+  /* Glassmorphism */
+  .glass {
+    @apply bg-white/10 dark:bg-black/20 backdrop-blur-xl border border-white/20 dark:border-black/20;
+  }
+  
+  /* Hero Section */
+  .hero {
+    @apply relative min-h-[60vh] md:min-h-[80vh] flex items-center overflow-hidden;
+  }
+  
+  .hero-bg {
+    @apply absolute inset-0 bg-gradient-to-br from-primary-600 via-blue-600 to-purple-600 opacity-90;
+  }
+  
+  .hero-content {
+    @apply relative z-10 container mx-auto px-4 text-center;
+  }
+  
+  /* Animations */
+  .animate-fade-in {
+    animation: fadeIn 1s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* Shadows */
+  .shadow-soft {
+    box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.1), 0 4px 10px -5px rgba(0, 0, 0, 0.05);
+  }
+  
+  .shadow-hover {
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15), 0 8px 20px -8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Fonts */
+  .font-heading {
+    font-family: 'Inter', sans-serif;
+    font-weight: 800;
+  }
+  
+  .font-body {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+  }
+  
+  /* Section */
+  /* (Defined in index.css under @layer components as well; kept here removed to avoid conflicts) */
 
-.ai-chat-header {
-  @apply bg-gradient-to-r from-primary-600 to-accent-500 text-white p-4 rounded-t-2xl flex items-center justify-between;
-}
-
-.ai-message {
-  @apply mb-3 p-3 rounded-xl max-w-xs;
-}
-
-.ai-message.user {
-  @apply bg-accent-500 text-white ml-auto;
-}
-
-.ai-message.ai {
-  @apply bg-surface/80 text-slate-200 border border-slate-600/50;
-}
-
-/* Product Grid */
-.product-grid {
-  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8;
-}
-
-/* Hero Section */
-.hero {
-  @apply min-h-screen flex items-center justify-center text-center text-white relative overflow-hidden;
-}
-
-.hero-bg {
-  @apply absolute inset-0 bg-gradient-to-br from-tech-gradient via-purple-900/50 to-slate-900 opacity-75;
-}
-
-.hero-content {
-  @apply relative z-10 max-w-4xl mx-auto px-6;
-}
-
-/* Loading Skeleton */
-.skeleton {
-  @apply bg-slate-700/50 animate-pulse rounded-xl;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .ai-chat {
-    @apply w-72 h-80 bottom-4 right-4;
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
   }
 }
 

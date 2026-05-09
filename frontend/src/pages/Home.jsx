@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ProductCard from '../components/ProductCard.jsx';
+import { useAuth } from '../contexts/AuthContext.jsx';
 import { api } from '../utils/api.js';
 
 const Home = () => {
@@ -8,6 +9,7 @@ const Home = () => {
   const [aiTools, setAiTools] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -51,78 +53,87 @@ const Home = () => {
       <section className="hero">
         <div className="hero-bg" />
         <div className="hero-content">
-          <div className="hero-glow mb-8">
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold bg-gradient-to-r from-white via-slate-100 to-accent-400 bg-clip-text text-transparent mb-6 leading-tight">
+          <div className="animate-fade-in mb-10">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-slate-100 dark:text-slate-200 mb-6">
+              <span className="w-2 h-2 rounded-full bg-primary-300" />
+              Premium tools • Simple checkout • Fast discovery
+            </div>
+
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-heading font-bold bg-gradient-to-r from-white via-gray-100 to-primary-300 bg-clip-text text-transparent mb-6 leading-tight">
               Smart Tech Store
             </h1>
-            <p className="text-xl md:text-2xl text-slate-300 mb-8 max-w-2xl mx-auto font-mono">
-              🚀 Premium <span className="text-accent-400">AI Tools</span>, <span className="text-primary-400">Software</span> & <span className="text-cyan-400">Dev Resources</span>
+
+            <p className="text-lg md:text-xl lg:text-2xl text-slate-200/90 mb-8 max-w-2xl mx-auto font-body">
+              Premium <span className="text-white font-semibold">AI Tools</span>,{' '}
+              <span className="text-accent-200 font-semibold">Software</span> &{' '}
+              <span className="text-emerald-200 font-semibold">Dev Resources</span>
             </p>
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-              <Link to="/shop" className="btn-primary text-lg px-8 py-4">
+              <Link to="/shop" className="btn-primary text-base md:text-lg px-10 py-4">
                 Explore Store
               </Link>
-              <Link to="/shop/category/ai-tools" className="btn-secondary text-lg px-8 py-4">
-                AI Tools First
+              <Link to="/shop/category/ai-tools" className="btn-secondary text-base md:text-lg px-10 py-4">
+                AI Tools
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Why Strong Section */}
-      <section className="section-padding bg-slate-900/50">
+      {/* Why Choose Us */}
+      <section className="section-padding bg-white">
         <div className="container">
           <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary-500 to-accent-500 bg-clip-text text-transparent mb-6">
-              💥 Why Smart Tech Store?
+            <h2 className="text-3xl md:text-5xl font-heading font-bold bg-gradient-to-r from-primary-600 to-accent-500 bg-clip-text text-transparent mb-6">
+              💥 Why Choose Us?
             </h2>
-            <p className="text-xl text-slate-400 max-w-3xl mx-auto">
-              Powering the next generation of developers with cutting-edge tools.
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto font-body">
+              Premium tools for modern developers
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="text-center p-8 glass rounded-2xl hover:scale-105 transition-all group">
-              <div className="w-20 h-20 bg-primary-500/20 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-primary-500/40 transition-all">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+            <div className="group card p-8 hover:shadow-hover transition-all cursor-pointer">
+              <div className="w-16 h-16 bg-primary-100 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-primary-200 transition-all">
                 💻
               </div>
-              <h3 className="text-2xl font-bold text-white mb-4">Informatique Connected</h3>
-              <p className="text-slate-400">Everything built for modern developers and tech professionals.</p>
+              <h3 className="text-xl font-bold text-neutral-900 mb-4 font-heading">Connected Tech</h3>
+              <p className="text-gray-600 font-body">Built for developers and tech professionals.</p>
             </div>
-            <div className="text-center p-8 glass rounded-2xl hover:scale-105 transition-all group">
-              <div className="w-20 h-20 bg-accent-500/20 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-accent-500/40 transition-all">
+            <div className="group card p-8 hover:shadow-hover transition-all cursor-pointer">
+              <div className="w-16 h-16 bg-accent-100 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-accent-200 transition-all">
                 🗄️
               </div>
-              <h3 className="text-2xl font-bold text-white mb-4">Easy Database</h3>
-              <p className="text-slate-400">Structured data ready for seamless integration and scaling.</p>
+              <h3 className="text-xl font-bold text-neutral-900 mb-4 font-heading">Easy Database</h3>
+              <p className="text-gray-600 font-body">Seamless integration & scaling.</p>
             </div>
-            <div className="text-center p-8 glass rounded-2xl hover:scale-105 transition-all group">
-              <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-pink-500/20 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-all">
+            <div className="group card p-8 hover:shadow-hover transition-all cursor-pointer">
+              <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-pink-100 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-all">
                 ✨
               </div>
-              <h3 className="text-2xl font-bold text-white mb-4">Imagination Presentation</h3>
-              <p className="text-slate-400">Stunning UI/UX that looks like a real startup product.</p>
+              <h3 className="text-xl font-bold text-neutral-900 mb-4 font-heading">Modern Design</h3>
+              <p className="text-gray-600 font-body">Stunning UI/UX for real products.</p>
             </div>
-            <div className="text-center p-8 glass rounded-2xl hover:scale-105 transition-all group">
-              <div className="w-20 h-20 bg-emerald-500/20 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-emerald-500/40 transition-all">
+            <div className="group card p-8 hover:shadow-hover transition-all cursor-pointer">
+              <div className="w-16 h-16 bg-success-100 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-success-200 transition-all">
                 🚀
               </div>
-              <h3 className="text-2xl font-bold text-white mb-4">Real Startup Feel</h3>
-              <p className="text-slate-400">Professional quality tools trusted by development teams worldwide.</p>
+              <h3 className="text-xl font-bold text-neutral-900 mb-4 font-heading">Startup Quality</h3>
+              <p className="text-gray-600 font-body">Trusted by dev teams worldwide.</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Featured Products */}
-      <section className="section-padding">
+      <section className="section-padding bg-gray-50">
         <div className="container">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary-500 to-accent-500 bg-clip-text text-transparent mb-4">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold bg-gradient-to-r from-primary-600 to-accent-500 bg-clip-text text-transparent mb-4">
               🔥 Featured Products
             </h2>
-            <p className="text-xl text-slate-400">Handpicked tools for serious developers</p>
+            <p className="text-xl text-gray-600 font-body">Handpicked tools for serious developers</p>
           </div>
           <div className="product-grid">
             {featuredProducts.map((product) => (
@@ -145,6 +156,36 @@ const Home = () => {
           <Link to="/shop" className="btn-primary text-xl px-12 py-5 inline-block transform hover:scale-105">
             Start Shopping Now
           </Link>
+        </div>
+      </section>
+
+      {/* Dashboard Access */}
+      <section className="section-padding bg-slate-950 text-white">
+        <div className="container">
+          <div className="grid lg:grid-cols-2 gap-8 items-center">
+            <div>
+              <span className="inline-flex items-center px-4 py-2 rounded-full bg-emerald-500/15 text-emerald-300 mb-4">Admin & Dashboard</span>
+              <h2 className="text-4xl md:text-5xl font-bold mb-6">Accédez au tableau de bord</h2>
+              <p className="text-lg text-slate-300 mb-8 max-w-2xl">
+                Le dashboard est disponible pour les utilisateurs connectés. Si vous êtes administrateur, utilisez <strong>admin@smartstore.com</strong> / <strong>admin123</strong> pour accéder au panneau d’administration.
+              </p>
+              <Link
+                to={user ? (user.role === 'admin' ? '/admin' : '/dashboard') : '/login'}
+                className="btn-primary text-lg px-10 py-4"
+              >
+                {user ? (user.role === 'admin' ? 'Aller au Admin Dashboard' : 'Aller à Mon Espace') : 'Se connecter pour voir le dashboard'}
+              </Link>
+            </div>
+            <div className="glass p-8 rounded-3xl border border-white/10 shadow-soft">
+              <h3 className="text-2xl font-bold text-white mb-4">Tableau de bord</h3>
+              <ul className="space-y-4 text-slate-300">
+                <li>• Gestion des produits</li>
+                <li>• Gestion des utilisateurs</li>
+                <li>• Consultation des messages clients</li>
+                <li>• Statistiques de vente et suivi</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </section>
     </div>
