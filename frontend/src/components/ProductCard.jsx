@@ -67,7 +67,7 @@ const ProductCard = ({ product }) => {
       </div>
 
       {/* Name & Description */}
-      <h3 className="text-xl font-bold text-neutral-900 dark:text-neutral-50 mb-2 line-clamp-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+      <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-2 line-clamp-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
         {product.name}
       </h3>
       <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">{product.description}</p>
@@ -75,7 +75,7 @@ const ProductCard = ({ product }) => {
       {/* Price & Rating */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <span className="text-2xl font-bold text-neutral-900 dark:text-neutral-50">
+          <span className="text-2xl font-bold text-neutral-900 dark:text-white">
             ${product.price}
           </span>
         </div>

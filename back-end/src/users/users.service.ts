@@ -10,7 +10,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
-async create(createDto: CreateUserDto) {
+  async create(createDto: CreateUserDto) {
     return this.userModel.create(createDto);
   }
 
@@ -26,7 +26,7 @@ async create(createDto: CreateUserDto) {
     return this.userModel.find();
   }
 
-async update(id: string, updateDto: UpdateUserDto) {
+  async update(id: string, updateDto: UpdateUserDto) {
     return this.userModel.findByIdAndUpdate(id, updateDto, { new: true });
   }
 

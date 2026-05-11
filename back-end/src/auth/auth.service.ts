@@ -21,7 +21,7 @@ export class AuthService {
       const token = this.jwtService.sign({ id: 'admin' });
       return {
         access_token: token,
-        user: { name: 'Admin', email, role: 'admin' }
+        user: { name: 'Admin', email, role: 'admin' },
       };
     }
 
@@ -29,7 +29,7 @@ export class AuthService {
     const token = this.jwtService.sign({ id: email });
     return {
       access_token: token,
-      user: { name: email.split('@')[0], email, role: 'user' }
+      user: { name: email.split('@')[0], email, role: 'user' },
     };
   }
 }

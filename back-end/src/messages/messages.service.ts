@@ -23,8 +23,13 @@ export class MessagesService {
     return this.messageModel.findById(id).exec();
   }
 
-  async update(id: string, updateMessageDto: Partial<CreateMessageDto>): Promise<Message> {
-    return this.messageModel.findByIdAndUpdate(id, updateMessageDto, { new: true }).exec();
+  async update(
+    id: string,
+    updateMessageDto: Partial<CreateMessageDto>,
+  ): Promise<Message> {
+    return this.messageModel
+      .findByIdAndUpdate(id, updateMessageDto, { new: true })
+      .exec();
   }
 
   async remove(id: string): Promise<Message> {
@@ -32,6 +37,8 @@ export class MessagesService {
   }
 
   async markAsRead(id: string): Promise<Message> {
-    return this.messageModel.findByIdAndUpdate(id, { read: true }, { new: true }).exec();
+    return this.messageModel
+      .findByIdAndUpdate(id, { read: true }, { new: true })
+      .exec();
   }
 }

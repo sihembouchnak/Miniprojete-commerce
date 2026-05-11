@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { api } from '../utils/api.js';
-import { PlusIcon, TrashIcon, PencilSquareIcon } from '@heroicons/react/24/outline';
+import { TrashIcon, PencilSquareIcon } from '@heroicons/react/24/outline';
 
 const blankForm = {
   name: '',
@@ -26,9 +26,14 @@ function parseImages(imagesInput) {
   return result;
 }
 
-function formatPrice(v) {
-  const n = Number(v);
-  return Number.isFinite(n) ? n : '';
+function parsePrice(priceStr) {
+  if (!priceStr || typeof priceStr !== 'string') return NaN;
+  // Remove currency symbols and spaces
+  let cleaned = priceStr.replace(/[$€¥,\s]/g, '').trim();
+  // Replace comma with period for decimals
+  cleaned = cleaned.replace(',', '.');
+  const num = parseFloat(cleaned);
+  return num;
 }
 
 const AdminProducts = () => {
@@ -47,6 +52,7 @@ const AdminProducts = () => {
   const canSubmit = useMemo(() => {
     if (!form.name.trim()) return false;
     if (!String(form.price).trim()) return false;
+    if (!Number.isFinite(parsePrice(form.price))) return false;
     if (!form.category.trim()) return false;
     if (form.stock !== '' && !Number.isFinite(Number(form.stock))) return false;
     return true;
@@ -80,7 +86,7 @@ const AdminProducts = () => {
   };
 
   const startEdit = (p) => {
-    setEditId(p.id);
+    setEditId(p._id || p.id);
     setForm({
       name: p.name || '',
       description: p.description || '',
@@ -102,14 +108,27 @@ const AdminProducts = () => {
     setSaving(true);
     setError('');
     try {
+      const parsedPrice = parsePrice(form.price);
+      const parsedStock = form.stock === '' ? undefined : Number(form.stock);
+
+      if (!Number.isFinite(parsedPrice)) {
+        setError(`Price must be a valid number (you entered: "${form.price}")`);
+        return;
+      }
+      if (parsedStock !== undefined && !Number.isFinite(parsedStock)) {
+        setError(`Stock must be a valid number (you entered: "${form.stock}")`);
+        return;
+      }
+
       const payload = {
         name: form.name.trim(),
         description: form.description.trim() || undefined,
-        price: Number(form.price),
+        price: parsedPrice,
         category: form.category.trim(),
-        stock: form.stock === '' ? undefined : Number(form.stock),
+        stock: parsedStock,
         images: parseImages(form.imagesInput),
       };
+
 
       if (editId) {
         await api.updateProduct(editId, payload);
@@ -321,8 +340,9 @@ const AdminProducts = () => {
                     <tbody className="text-slate-200">
                       {products.map((p) => {
                         const preview = Array.isArray(p.images) && p.images[0] ? p.images[0] : p.image;
+                        const productId = p._id || p.id;
                         return (
-                          <tr key={p.id} className="border-t border-white/10">
+                          <tr key={productId} className="border-t border-white/10">
                             <td className="py-3">
                               <div className="w-14 h-14 rounded-xl overflow-hidden bg-white/5 border border-white/10">
                                 {preview ? (
@@ -339,7 +359,7 @@ const AdminProducts = () => {
                             </td>
                             <td className="py-3">
                               <div className="font-semibold text-white">{p.name}</div>
-                              <div className="text-xs text-slate-500 font-mono">{p.id}</div>
+                              <div className="text-xs text-slate-500 font-mono">{productId}</div>
                             </td>
                             <td className="py-3">{p.category}</td>
                             <td className="py-3">${p.price}</td>
@@ -357,9 +377,9 @@ const AdminProducts = () => {
 
                                 <button
                                   type="button"
-                                  disabled={deletingId === p.id}
+                                  disabled={deletingId === productId}
                                   className="p-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 transition disabled:opacity-60"
-                                  onClick={() => remove(p.id)}
+                                  onClick={() => remove(productId)}
                                   title="Delete"
                                 >
                                   <TrashIcon className="w-5 h-5 text-red-300" />
@@ -382,4 +402,3 @@ const AdminProducts = () => {
 };
 
 export default AdminProducts;
-

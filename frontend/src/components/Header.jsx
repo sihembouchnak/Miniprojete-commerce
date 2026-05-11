@@ -63,7 +63,7 @@ const Header = () => {
             </div>
 
             <div>
-              <h1 className="text-xl lg:text-2xl xl:text-3xl font-bold text-neutral-900 dark:text-neutral-50">
+              <h1 className="text-xl lg:text-2xl xl:text-3xl font-bold text-neutral-900 dark:text-white">
                 Smart Tech Store
               </h1>
               <p className="text-xs lg:text-sm text-gray-500 dark:text-gray-400 font-mono">AI • Software • Dev</p>

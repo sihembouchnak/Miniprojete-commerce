@@ -33,7 +33,10 @@ export class MessagesController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateDto: Partial<CreateMessageDto>) {
+  update(
+    @Param('id') id: string,
+    @Body() updateDto: Partial<CreateMessageDto>,
+  ) {
     return this.messagesService.update(id, updateDto);
   }
 

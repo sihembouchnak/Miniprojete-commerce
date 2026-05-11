@@ -8,6 +8,7 @@ import {
   MinLength,
   MaxLength,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateProductDto {
   @IsString()
@@ -20,7 +21,8 @@ export class CreateProductDto {
   @MaxLength(500)
   description?: string;
 
-  @IsNumber()
+  @Type(() => Number)
+  @IsNumber({ allowNaN: false })
   @IsPositive()
   price: number;
 
@@ -28,7 +30,8 @@ export class CreateProductDto {
   @IsOptional()
   category?: string;
 
-  @IsNumber()
+  @Type(() => Number)
+  @IsNumber({ allowNaN: false })
   @Min(0)
   @IsOptional()
   stock?: number;

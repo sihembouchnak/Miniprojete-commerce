@@ -9,4 +9,13 @@
 
 - [x] Lancer le build/dev pour vérifier absence d’erreurs Tailwind
 
+---
+
+# TODO - Correction enregistrement produit
+
+- [ ] Modifier backend DTO (CreateProductDto / UpdateProductDto) pour convertir price/stock depuis JSON (class-transformer) et éviter NaN.
+- [ ] Sécuriser frontend AdminProducts.jsx : empêcher l’envoi de NaN pour price/stock avant appel API.
+- [ ] Tester : création produit + modification produit + vérifier que la liste se recharge et que le bloc error ne s’affiche plus.
+
+
 
