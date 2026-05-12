@@ -4,6 +4,11 @@ const CartContext = createContext();
 
 const cartReducer = (state, action) => {
   switch (action.type) {
+    case 'SET_CART':
+      return {
+        ...state,
+        items: Array.isArray(action.payload) ? action.payload : [],
+      };
     case 'ADD_ITEM':
       const existingItem = state.items.find(item => item.id === action.payload.id);
       if (existingItem) {
@@ -54,9 +59,9 @@ export const CartProvider = ({ children }) => {
     if (savedCart) {
       try {
         const parsedCart = JSON.parse(savedCart);
-        parsedCart.items.forEach(item => {
-          dispatch({ type: 'ADD_ITEM', payload: item });
-        });
+        if (parsedCart && Array.isArray(parsedCart.items)) {
+          dispatch({ type: 'SET_CART', payload: parsedCart.items });
+        }
       } catch (error) {
         console.error('Error loading cart from localStorage:', error);
       }
