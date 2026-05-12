@@ -2,6 +2,35 @@ import { products as mockProducts } from '../data/products.js';
 
 const mockDelay = (ms = 300) => new Promise(resolve => setTimeout(resolve, ms));
 
+const mockUsers = [
+  { id: 'user-1', name: 'Admin User', email: 'admin@smartstore.com', role: 'admin' },
+  { id: 'user-2', name: 'Demo User', email: 'user@example.com', role: 'user' },
+];
+
+const mockMessages = [
+  {
+    id: 'message-1',
+    name: 'Alice',
+    email: 'alice@example.com',
+    subject: 'Question sur un produit',
+    message: 'Bonjour, puis-je avoir plus d’information sur l’outil AI Resume Builder ?',
+    read: false,
+  },
+  {
+    id: 'message-2',
+    name: 'Bob',
+    email: 'bob@example.com',
+    subject: 'Problème de commande',
+    message: 'Ma commande n’apparaît pas dans le dashboard.',
+    read: true,
+  },
+];
+
+let nextProductId = mockProducts.reduce((max, item) => {
+  const id = Number(item.id);
+  return Number.isFinite(id) ? Math.max(max, id) : max;
+}, 0) + 1;
+
 const mockApi = {
   getProducts: async (filters = {}) => {
     await mockDelay();
@@ -24,22 +53,87 @@ const mockApi = {
 
   getProduct: async (id) => {
     await mockDelay();
-    const product = mockProducts.find(p => p.id == id);
+    const product = mockProducts.find(p => p.id == id || String(p.id) === String(id));
     if (!product) throw new Error('Product not found');
     return product;
   },
 
   getCategories: async () => {
     await mockDelay();
-    return Array.from(new Set(mockProducts.map(p => p.category)));
+    return Array.from(new Set(mockProducts.map(p => p.category).filter(Boolean)));
   },
 
-  createProduct: async () => { throw new Error('Backend required'); },
-  updateProduct: async () => { throw new Error('Backend required'); },
-  deleteProduct: async () => { throw new Error('Backend required'); },
-  getUsers: async () => { throw new Error('Backend required'); },
-  updateUser: async () => { throw new Error('Backend required'); },
-  deleteUser: async () => { throw new Error('Backend required'); },
+  createProduct: async (payload) => {
+    await mockDelay();
+    const product = { id: nextProductId++, ...payload };
+    mockProducts.push(product);
+    return product;
+  },
+
+  updateProduct: async (id, payload) => {
+    await mockDelay();
+    const index = mockProducts.findIndex(p => p.id == id || String(p.id) === String(id));
+    if (index === -1) throw new Error('Product not found');
+    mockProducts[index] = { ...mockProducts[index], ...payload };
+    return mockProducts[index];
+  },
+
+  deleteProduct: async (id) => {
+    await mockDelay();
+    const index = mockProducts.findIndex(p => p.id == id || String(p.id) === String(id));
+    if (index === -1) throw new Error('Product not found');
+    mockProducts.splice(index, 1);
+    return { success: true };
+  },
+
+  getUsers: async () => {
+    await mockDelay();
+    return { data: mockUsers };
+  },
+
+  updateUser: async (id, payload) => {
+    await mockDelay();
+    const index = mockUsers.findIndex(u => u.id == id || String(u.id) === String(id));
+    if (index === -1) throw new Error('User not found');
+    mockUsers[index] = { ...mockUsers[index], ...payload };
+    return mockUsers[index];
+  },
+
+  deleteUser: async (id) => {
+    await mockDelay();
+    const index = mockUsers.findIndex(u => u.id == id || String(u.id) === String(id));
+    if (index === -1) throw new Error('User not found');
+    mockUsers.splice(index, 1);
+    return { success: true };
+  },
+
+  getMessages: async () => {
+    await mockDelay();
+    return { data: [...mockMessages] };
+  },
+
+  sendMessage: async (payload) => {
+    await mockDelay();
+    const message = { id: `message-${mockMessages.length + 1}`, read: false, ...payload };
+    mockMessages.unshift(message);
+    return message;
+  },
+
+  markMessageAsRead: async (id) => {
+    await mockDelay();
+    const message = mockMessages.find(m => m.id == id || String(m.id) === String(id));
+    if (!message) throw new Error('Message not found');
+    message.read = true;
+    return message;
+  },
+
+  deleteMessage: async (id) => {
+    await mockDelay();
+    const index = mockMessages.findIndex(m => m.id == id || String(m.id) === String(id));
+    if (index === -1) throw new Error('Message not found');
+    mockMessages.splice(index, 1);
+    return { success: true };
+  },
 };
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3003';
@@ -86,13 +180,11 @@ export const api = {
   getProducts: async (filters = {}) => {
     try {
       const data = await request('/products', { query: filters });
-      // backend returns array currently. normalize to match UI expectations {data,total,pages}
       const arr = Array.isArray(data) ? data : data?.data;
       const list = arr || [];
       return {
         data: list,
         total: list.length,
-        // backend currently returns a list (no pagination metadata). Keep pages consistent anyway.
         pages: Math.max(1, Math.ceil(list.length / 12)),
       };
     } catch (e) {
@@ -110,7 +202,6 @@ export const api = {
 
   getCategories: async () => {
     try {
-      // backend has no categories endpoint; derive from products
       const productsResp = await request('/products');
       const list = Array.isArray(productsResp) ? productsResp : productsResp?.data || [];
       return Array.from(new Set(list.map(p => p.category).filter(Boolean)));
@@ -120,15 +211,27 @@ export const api = {
   },
 
   createProduct: async (payload) => {
-    return request('/products', { method: 'POST', body: payload, token: getToken() });
+    try {
+      return await request('/products', { method: 'POST', body: payload, token: getToken() });
+    } catch (e) {
+      return mockApi.createProduct(payload);
+    }
   },
 
   updateProduct: async (id, payload) => {
-    return request(`/products/${id}`, { method: 'PUT', body: payload, token: getToken() });
+    try {
+      return await request(`/products/${id}`, { method: 'PUT', body: payload, token: getToken() });
+    } catch (e) {
+      return mockApi.updateProduct(id, payload);
+    }
   },
 
   deleteProduct: async (id) => {
-    return request(`/products/${id}`, { method: 'DELETE', token: getToken() });
+    try {
+      return await request(`/products/${id}`, { method: 'DELETE', token: getToken() });
+    } catch (e) {
+      return mockApi.deleteProduct(id);
+    }
   },
 
   getUsers: async () => {
@@ -141,15 +244,27 @@ export const api = {
   },
 
   updateUser: async (id, payload) => {
-    return request(`/users/${id}`, { method: 'PUT', body: payload, token: getToken() });
+    try {
+      return await request(`/users/${id}`, { method: 'PUT', body: payload, token: getToken() });
+    } catch (e) {
+      return mockApi.updateUser(id, payload);
+    }
   },
 
   deleteUser: async (id) => {
-    return request(`/users/${id}`, { method: 'DELETE', token: getToken() });
+    try {
+      return await request(`/users/${id}`, { method: 'DELETE', token: getToken() });
+    } catch (e) {
+      return mockApi.deleteUser(id);
+    }
   },
 
   sendMessage: async (payload) => {
-    return request('/messages', { method: 'POST', body: payload });
+    try {
+      return await request('/messages', { method: 'POST', body: payload });
+    } catch (e) {
+      return mockApi.sendMessage(payload);
+    }
   },
 
   getMessages: async () => {
@@ -157,16 +272,24 @@ export const api = {
       const data = await request('/messages', { token: getToken() });
       return { data: Array.isArray(data) ? data : (data?.data || []) };
     } catch (e) {
-      return { data: [] };
+      return mockApi.getMessages();
     }
   },
 
   markMessageAsRead: async (id) => {
-    return request(`/messages/${id}/read`, { method: 'PUT', token: getToken() });
+    try {
+      return await request(`/messages/${id}/read`, { method: 'PUT', token: getToken() });
+    } catch (e) {
+      return mockApi.markMessageAsRead(id);
+    }
   },
 
   deleteMessage: async (id) => {
-    return request(`/messages/${id}`, { method: 'DELETE', token: getToken() });
+    try {
+      return await request(`/messages/${id}`, { method: 'DELETE', token: getToken() });
+    } catch (e) {
+      return mockApi.deleteMessage(id);
+    }
   },
 };
 

@@ -26,11 +26,13 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3003';
+
   const login = async (email, password) => {
     const normalizedEmail = email.toLowerCase();
 
     try {
-      const response = await fetch('http://localhost:3003/auth/login', {
+      const response = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -72,7 +74,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (name, email, password) => {
     try {
-      const response = await fetch('http://localhost:3003/auth/register', {
+      const response = await fetch(`${API_URL}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password }),
